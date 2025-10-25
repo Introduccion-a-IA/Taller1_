@@ -20,13 +20,29 @@ jobs:
         pip install jupyter nbconvert ipykernel nbformat
         python -m ipykernel install --user --name=python3
 
+    - name: configuracion tests privados
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.TEST_CLAVE_PRIVADA }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+    - name: Descarga de tests privados
+      run: |
+        git clone git@github.com:Introduccion-a-IA/test_privados.git temp_repo
+        mkdir -p tests_descargados
+        cp temp_repo/test_taller_integrador.py tests_descargados/
+        rm -rf temp_repo
+
     # - name: Configuracion de test
     # #acá definimos la clave o contraseña para la conexion ssh 
+    # #esto se activa solo para test virtual privado
     #   run: |
-    #     mkdir 
+    #     echo 
 
     # - name: Descarga de tests
     # #acá descargamos los test del repositorio externo
+    # #esto se activa solo para test virtual privado
     #   run: |
     #     git clone git@github.com:Introduccion-a-IA/
 
@@ -39,7 +55,12 @@ jobs:
 
         
 
-    - name: Verificacion de tests
-    #
+    # - name: Verificacion de tests
+    # #Esto es para correr los test virtuales pero en misma repositorio
+    #   run: |
+    #     PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest test/test_taller_integrador.py -v
+
+    - name: run de tests ejecicio
+    #Esto es para correr los test virtuales pero en misma repositorio
       run: |
-        PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest test/test_taller_integrador.py -v
+        PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest tests_descargados/ -v
