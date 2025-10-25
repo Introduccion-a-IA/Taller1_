@@ -42,4 +42,4 @@ jobs:
     - name: Verificacion de tests
     #
       run: |
-        PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest test/Taller_1.py -v
+        PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest test/test_taller_integrador.py -v
