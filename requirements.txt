@@ -3,3 +3,4 @@ nbformat
 experta
 nbconvert
 pandas
+ipython
